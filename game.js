@@ -1,3 +1,4 @@
+
 /**
  * [game.js] - 좌표 기반 판정 시스템 (수정 완료)
  */
@@ -13,16 +14,16 @@ let activeNotes = [];
 let hasNonPerfect = false; // perfect가 아닌 다른 판정이 나왔는지 체크하는 깃발
 
 // 배경 상의 실제 판정선 위치 좌표
-const HIT_LINE_X = 1070; 
+const HIT_LINE_X = 1122; 
 
 // 하트 캔버스 내부에서 '하트'가 그려져 있는 상대적 X좌표 위치
 const HEART_OFFSET_IN_CANVAS = 500; 
 
 // 판정 범위
 const JUDGMENT_RANGE = {
-    perfect: 20,
-    great: 50,
-    good: 90
+    perfect: 40,
+    great: 70,
+    good:110
 };
 
 // DOM 캐싱
@@ -186,7 +187,7 @@ function updateGame() {
         noteObj.currentHeartX = currentLeft + HEART_OFFSET_IN_CANVAS;
 
         
-        if (noteObj.currentHeartX > HIT_LINE_X + 80) {
+        if (noteObj.currentHeartX > HIT_LINE_X + 45) {
             applyJudgment('miss');
             noteObj.element.remove();
             activeNotes.splice(i, 1);
@@ -214,18 +215,34 @@ elGameScreen.addEventListener('pointerdown', (e) => {
     if (!isPlaying || activeNotes.length === 0) return;
 
     let targetNote = activeNotes[0];
-    let pixelDiff = Math.abs(targetNote.currentHeartX - HIT_LINE_X);
+    let pixelDiff2 = targetNote.currentHeartX - HIT_LINE_X;
+
+    let pixelDiff = Math.abs(pixelDiff2);
+
+
 
     if (pixelDiff <= JUDGMENT_RANGE.perfect) {
+         console.log('perfect 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
+
         applyJudgment('perfect');
         removeTargetNote();
     } else if (pixelDiff <= JUDGMENT_RANGE.great) {
+         console.log('great 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
+
         applyJudgment('great');
         removeTargetNote();
     } else if (pixelDiff <= JUDGMENT_RANGE.good) {
+         console.log('good 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
+
         applyJudgment('good');
         removeTargetNote();
+    } else {
+         applyJudgment('miss');
+        removeTargetNote();
     }
+
+    
+
 });
 
 function removeTargetNote() {
