@@ -21,7 +21,7 @@ const HEART_OFFSET_IN_CANVAS = 500;
 
 // 판정 범위
 const JUDGMENT_RANGE = {
-    perfect: 30,
+    perfect: 20,
     great: 60,
     good:100
 };
