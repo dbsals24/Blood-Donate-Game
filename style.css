@@ -170,7 +170,7 @@ html, body {
     /* [중요] 글자와 테두리 사이에 여백(안쪽 여백)을 주어야 답답하지 않고 예쁩니다 */
     padding: 20px 40px;                  /* 위아래 20px, 좌우 40px 여백 */
 }
-#countdown { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 150px; color: #ffffff; font-weight: bold; z-index: 10; }
+#countdown { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 150px; color: #000000; font-weight: bold; z-index: 10; }
 
 /* 혈액 게이지 */
 #blood-pack {
