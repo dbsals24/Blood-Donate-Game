@@ -1,0 +1,276 @@
+/* ==========================================
+   1. 브라우저 창 전체 설정 (검은 여백 및 중앙 정렬)
+========================================== */
+html, body {
+    margin: 0; 
+    padding: 0; 
+    background-color: #111; /* 브라우저 배경 */
+    
+    /* 화면 크기가 변해도 항상 게임 박스가 정중앙에 오도록 설정 */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+    width: 100vw;
+    
+    font-family: sans-serif; 
+    overflow: hidden; /* 스크롤바 절대 안 뜨게 차단 */
+}
+
+/* ==========================================
+   2. ★ 게임 플레이 박스를 1500x1125 해상도로 절대 고정 및 비율 스케일 적용
+========================================== */
+#game-container {
+    position: relative; 
+    width: 1500px; 
+    height: 1125px;
+    background-color: #000; 
+    overflow: hidden; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    
+    /* 🛠️ [화면 안 깨지게 고정하는 핵심 코드 추가] */
+    transform-origin: center center; /* 축소될 때 중앙을 기준으로 크기 조절 */
+    flex-shrink: 0;                  /* 부모 flex에 의해 크기가 강제로 찌그러지는 것 방지 */
+}
+
+/* 모든 화면 레이어 */
+.screen { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+.hidden { display: none !important; }
+
+/* 배경 이미지 전체 화면에 딱 맞춤 */
+.bg-image { 
+    position: absolute; width: 1500px; height: 1125px; top: 0; left: 0;
+    object-fit: fill; pointer-events: none; 
+}
+.img-btn { 
+    position: absolute; top: 0; left: 0; width: 1500px; height: 1125px;
+    background: none; border: none; cursor: pointer; padding: 0; z-index: 2;
+}
+.img-btn img { display: block; width: 1500px; height: 1125px; object-fit: fill; }
+
+.next-trigger { position: absolute; width: 100%; height: 100%; background: transparent; border: none; cursor: pointer; z-index: 10; }
+
+/* 🛠️ 추가: 게임 제목 스타일 */
+#game-title {
+    position: absolute;
+    width: 100%;          
+    left: 0;
+    top: 300px;           
+    
+    text-align: center;   
+    font-size: 100px;      
+    font-weight: bold;    
+    color: #ffffff;       
+    
+    font-family: 'Arial', sans-serif; 
+    z-index: 10;          
+    margin: 0;            
+}
+
+/* 레벨 버튼들을 감싸는 통짜 부모 박스 */
+.level-buttons { 
+    position: absolute; 
+    width: 1500px; 
+    height: 1125px; 
+    top: 0; 
+    left: 0; 
+    z-index: 9999 !important; 
+    cursor: pointer;          
+}
+
+/* 2. 겹쳐져 있는 4개의 레벨 버튼들은 절대 마우스를 방해하지 못하게 차단 */
+.btn-lvl { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 1500px; 
+    height: 1125px;
+    background: none; 
+    border: none; 
+    padding: 0; 
+    z-index: 2;
+    pointer-events: none !important; 
+}
+
+.btn-lvl img { 
+    display: block; 
+    width: 1500px; 
+    height: 1125px; 
+    object-fit: fill; 
+    pointer-events: none !important; 
+}
+
+/* 레벨 선택 화면 내 돌아가기 버튼 */
+#btn-back-to-start {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1500px;
+    height: 1125px;
+    background-image: url('images/btn_retry.png'); 
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 20; 
+    pointer-events: auto; 
+    clip-path: polygon(75% 66.6%, 100% 66.6%, 100% 100%, 75% 100%);
+    display: none; 
+}
+
+/* 활성화되었을 때 보여주는 클래스 */
+#btn-back-to-start.active {
+    display: block;
+}
+
+/* --- [통합된 설명 화면 팝업] --- */
+#info-popup {
+    position: absolute; 
+    width: 1500px; 
+    height: 1125px; 
+    top: 0; 
+    left: 0; 
+    z-index: 5;
+}
+
+#info-text {
+    position: absolute;
+    width: 550px;         
+    left: 800px; 
+    top: 200px;            
+    
+    color: #ffffff;        
+    font-size: 36px;       
+    font-weight: bold;     
+    text-align: center;    
+    line-height: 1.5;      
+    z-index: 6;
+}
+
+
+/* 결과 화면 텍스트 디자인 스타일 */
+#result-message {
+    position: absolute; width: 100%; bottom: 400px; left: 0;
+    color: rgb(0, 0, 0); font-size: 48px; font-weight: bold; text-align: center; z-index: 6;
+}
+
+/* --- [게임 화면 UI] --- */
+#ui-score { 
+    position: absolute; 
+    top: 130px; 
+    left: 130px; 
+    color: #ffffff;       
+    font-size: 100px; 
+    font-weight: bold; 
+    z-index: 10; 
+
+    background-color: rgba(0, 0, 0, 0.6); /* 🖤 반투명한 검은색 배경 (빨,녹,파,투명도0.6) */
+    border: 4px solid #ffffff;           /* 🤍 4픽셀 두께의 흰색 실선 테두리 */
+    border-radius: 15px;                 /* 둥근 모서리 효과 (숫자가 클수록 더 둥글어짐) */
+    
+    /* [중요] 글자와 테두리 사이에 여백(안쪽 여백)을 주어야 답답하지 않고 예쁩니다 */
+    padding: 20px 40px;                  /* 위아래 20px, 좌우 40px 여백 */
+}
+#countdown { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 150px; color: #ff3333; font-weight: bold; z-index: 10; }
+
+/* 혈액 게이지 */
+#blood-pack {
+    position: absolute; top: 92px; left: 1090px; width: 200px; height: 225px; 
+    border: 6px solid #fff; background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px; overflow: hidden; display: flex; align-items: flex-end; z-index: 10;
+}
+#blood-fluid { 
+    width: 100%; 
+    height: 30%; 
+    background-color: #dd2222; 
+    transition: height 0.2s ease-out; 
+    position: relative; 
+    align-self: flex-end; 
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* 게임 레인 박스 */
+#lane {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1500px;
+    height: 1125px;
+    background-color: transparent; 
+    z-index: 4;
+}
+
+#note-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* 판정선 위치 */
+#judgment-line {
+    position: absolute;
+    top: 0;
+    left: 1200px; 
+    width: 6px;
+    height: 100%;
+    background-color: transparent;
+    z-index: 5;
+}
+
+/* 하트 캔버스 */
+.note {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1500px;
+    height: 1125px;
+    background-image: url('images/note_heart.png');
+    background-size: fill;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* 판정 결과 이미지 팝업 */
+#judgment-display {
+    position: absolute;
+    top: 50px;
+    left: 42%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/*클리어 직후 중앙 텍스트 스타일 */
+#game-over-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1500px;
+    height: 1125px;
+    z-index: 100;
+
+    pointer-events: none !important; 
+}
+
+#img-game-over {
+    display: block;
+    width: 1500px;
+    height: 1125px;
+    object-fit: fill;
+    pointer-events: none !important; /* 이미지 자체도 클릭 통과 */
+}
+
+
+
+#story-text {
+    position: absolute;
+    left: 210px;           
+    top: 760px;            
+    width: 700px;          
+    text-align: left;     
+    color: #ffffff;        
+    font-size: 38px;       
+    font-weight: bold;     
+    line-height: 1.6;      
+    z-index: 6;
+    box-sizing: border-box; 
+}

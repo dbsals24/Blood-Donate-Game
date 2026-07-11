@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헌혈 리듬 게임</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="screen-start" class="screen">
+            <h1 id="game-title">헌혈 프로젝트 게임</h1>
+            <button id="btn-start" class="img-btn"><img src="images/btn_start.png" alt="시작하기"></button>
+        </div>
+
+        <div id="screen-level" class="screen hidden">
+            <img src="images/bg_level.png" alt="레벨 선택 배경" class="bg-image">
+
+            <div class="level-buttons">
+                <button class="btn-lvl" data-level="1"><img src="images/btn_lvl1.png" alt="레벨 1"></button>
+                <button class="btn-lvl" data-level="2"><img src="images/btn_lvl2.png" alt="레벨 2"></button>
+                <button class="btn-lvl" data-level="3"><img src="images/btn_lvl3.png" alt="레벨 3"></button>
+                <button class="btn-lvl" data-level="4"><img src="images/btn_lvl4.png" alt="레벨 4"></button>
+            </div>
+
+            <div id="btn-back-to-start"></div>
+
+            <div id="info-popup" class="hidden">
+                <img src="images/bg_info.png" alt="시작 설명" class="bg-image">
+                <div id="info-text">헌혈 정보가 표시되는 곳</div>
+                <button id="btn-info-next" class="next-trigger"></button>
+            </div>
+        </div>
+
+       <div id="screen-story" class="screen hidden">
+            <img src="images/bg_story.png" alt="스토리" class="bg-image">
+            
+            <div id="story-text">여기에 스토리 내용이 표시됩니다.</div>
+            
+            <button id="btn-story-next" class="next-trigger"></button>
+        </div>
+
+        <div id="screen-game" class="screen hidden">
+            <img src="images/bg_game.png" alt="게임 배경" class="bg-image">
+            
+            <div id="ui-score">Score: <span id="txt-score">300</span></div>
+            <div id="countdown" class="hidden">3</div>
+
+            <div id="game-over-display" class="hidden">
+                <img id="img-game-over" src="" alt="게임 결과 연출">
+            </div>
+
+            <div id="blood-pack">
+                <div id="blood-fluid"></div>
+            </div>
+
+            <div id="lane">
+                <div id="judgment-line"></div>
+                <div id="note-container"></div>
+            </div>
+
+            <div id="judgment-display" class="hidden">
+                <img id="img-judgment" src="" alt="판정">
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen hidden">
+            <img id="img-result-bg" src="" alt="결과 배경" class="bg-image">
+            <div id="result-message">결과 메시지</div>
+            <button id="btn-retry" class="img-btn"><img src="images/btn_retry.png" alt="돌아가기"></button>
+        </div>
+    </div>
+
+    <script src="songs.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
