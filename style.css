@@ -4,7 +4,7 @@
 html, body {
     margin: 0; 
     padding: 0; 
-    background-color: #dcdcdc; /* 브라우저 배경 */
+    background-color: #ffffff; /* 브라우저 배경 */
     
     /* 화면 크기가 변해도 항상 게임 박스가 정중앙에 오도록 설정 */
     display: flex; 
