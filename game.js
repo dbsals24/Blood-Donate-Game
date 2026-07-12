@@ -214,17 +214,19 @@ elGameScreen.addEventListener('pointerdown', (e) => {
     if (e.target.tagName === 'BUTTON') return;
     if (!isPlaying || activeNotes.length === 0) return;
 
-    // activeNotes[0]은 미스 처리되지 않고 살아있는 노트 중 '가장 먼저 생성된 노트'입니다.
+    // [1번 요구사항 반영] 살아있는 하트 중 무조건 '가장 먼저 생성된 하트'만 조준
     let targetNote = activeNotes[0];
     
-    // 판정선과의 실제 거리 계산
-    let pixelDiff2 = targetNote.currentHeartX - HIT_LINE_X;
+    let pixelDiff2 = targetNote.currentHeartX - HIT_LINE_X; // 양수면 지나침, 음수면 도달 전
     let pixelDiff = Math.abs(pixelDiff2);
 
-    // [콘솔 로그 출력]
-    console.log(`[판정 대상] 생성 순서: 1순위 / 하트 위치: ${targetNote.currentHeartX} / 판정선과의 거리: ${pixelDiff}`);
+    // [2번 요구사항 반영] 판정선 도달 전이고 너무 멀다면 미스 주지 않고 무시(얼리 미스 방지)
+    if (pixelDiff2 < 0 && pixelDiff > JUDGMENT_RANGE.good) {
+        console.log('하트가 아직 멀리 있어 입력을 무시합니다.');
+        return; 
+    }
 
-    // 가장 먼저 생성된 노트에 대해 거리 기준으로 판정 수행
+    // 🎯 정상 판정 범위 (Perfect / Great / Good)
     if (pixelDiff <= JUDGMENT_RANGE.perfect) {
         applyJudgment('perfect');
         removeTargetNote();
@@ -234,10 +236,9 @@ elGameScreen.addEventListener('pointerdown', (e) => {
     } else if (pixelDiff <= JUDGMENT_RANGE.good) {
         applyJudgment('good');
         removeTargetNote();
-    } else {
-        // 판정 범위(good: 150px)를 벗어난 너무 먼 거리에서 터치했을 때의 처리
-        // 1. 판정선에 도달하기도 전에 너무 일찍 눌렀거나(얼리 미스)
-        // 2. 이미 판정선을 지나쳤으나 아직 미스 삭제 기준(+45px)에는 안 걸쳤을 때
+    } 
+    // [2번 요구사항 반영] 오직 판정선을 이미 '지나쳤을 때만' miss 처리
+    else if (pixelDiff2 > 0) {
         applyJudgment('miss');
         removeTargetNote();
     }
