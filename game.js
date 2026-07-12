@@ -22,8 +22,8 @@ const HEART_OFFSET_IN_CANVAS = 500;
 // 판정 범위
 const JUDGMENT_RANGE = {
     perfect: 20,
-    great: 70,
-    good:150
+    great: 60,
+    good:100
 };
 
 // DOM 캐싱
@@ -214,35 +214,33 @@ elGameScreen.addEventListener('pointerdown', (e) => {
     if (e.target.tagName === 'BUTTON') return;
     if (!isPlaying || activeNotes.length === 0) return;
 
+    // activeNotes[0]은 미스 처리되지 않고 살아있는 노트 중 '가장 먼저 생성된 노트'입니다.
     let targetNote = activeNotes[0];
+    
+    // 판정선과의 실제 거리 계산
     let pixelDiff2 = targetNote.currentHeartX - HIT_LINE_X;
-
     let pixelDiff = Math.abs(pixelDiff2);
 
+    // [콘솔 로그 출력]
+    console.log(`[판정 대상] 생성 순서: 1순위 / 하트 위치: ${targetNote.currentHeartX} / 판정선과의 거리: ${pixelDiff}`);
 
-
+    // 가장 먼저 생성된 노트에 대해 거리 기준으로 판정 수행
     if (pixelDiff <= JUDGMENT_RANGE.perfect) {
-         console.log('perfect 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
-
         applyJudgment('perfect');
         removeTargetNote();
     } else if (pixelDiff <= JUDGMENT_RANGE.great) {
-         console.log('great 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
-
         applyJudgment('great');
         removeTargetNote();
     } else if (pixelDiff <= JUDGMENT_RANGE.good) {
-         console.log('good 하트위치 '+ targetNote.currentHeartX +' / 차이 '+ pixelDiff )
-
         applyJudgment('good');
         removeTargetNote();
     } else {
-         applyJudgment('miss');
+        // 판정 범위(good: 150px)를 벗어난 너무 먼 거리에서 터치했을 때의 처리
+        // 1. 판정선에 도달하기도 전에 너무 일찍 눌렀거나(얼리 미스)
+        // 2. 이미 판정선을 지나쳤으나 아직 미스 삭제 기준(+45px)에는 안 걸쳤을 때
+        applyJudgment('miss');
         removeTargetNote();
     }
-
-    
-
 });
 
 function removeTargetNote() {
