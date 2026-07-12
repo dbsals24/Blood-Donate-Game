@@ -14,7 +14,7 @@ let activeNotes = [];
 let hasNonPerfect = false; // perfect가 아닌 다른 판정이 나왔는지 체크하는 깃발
 
 // 배경 상의 실제 판정선 위치 좌표
-const HIT_LINE_X = 1122; 
+const HIT_LINE_X = 1100; 
 
 // 하트 캔버스 내부에서 '하트'가 그려져 있는 상대적 X좌표 위치
 const HEART_OFFSET_IN_CANVAS = 500; 
